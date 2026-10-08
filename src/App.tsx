@@ -5,7 +5,7 @@ import { useState } from 'react';
 import cn from 'classnames';
 import { GoodList } from './GoodList/GoodList';
 import { sortByParam } from './utils';
-import { IsActive } from './types';
+import { SortType } from './types';
 
 export const goodsFromServer: string[] = [
   'Dumplings',
@@ -21,37 +21,39 @@ export const goodsFromServer: string[] = [
 ];
 
 export const App: React.FC = () => {
-  const [sortByAlphabet, setSortByAlphabet] = useState<IsActive>('inactive');
-  const [sortByLength, setSortByLength] = useState<IsActive>('inactive');
-  const [reverseArr, setReverseArr] = useState<IsActive>('inactive');
+  const [sortByAlphabet, setSortByAlphabet] = useState<SortType>(
+    SortType.Default,
+  );
+  const [sortByLength, setSortByLength] = useState<SortType>(SortType.Default);
+  const [reverseArr, setReverseArr] = useState<SortType>(SortType.Default);
   const isResetActive =
-    sortByAlphabet !== 'inactive' ||
-    sortByLength !== 'inactive' ||
-    reverseArr !== 'inactive';
+    sortByAlphabet !== SortType.Default ||
+    sortByLength !== SortType.Default ||
+    reverseArr !== SortType.Default;
   const calculatedGoods = sortByParam(goodsFromServer, {
     byAlphabet: sortByAlphabet,
     byLength: sortByLength,
     reverse: reverseArr,
   });
 
-  function handleSortByAlphabet(value: IsActive) {
+  function handleSortByAlphabet(value: SortType) {
     setSortByAlphabet(value);
-    setSortByLength('inactive');
+    setSortByLength(SortType.Default);
   }
 
-  function handleSortByLength(value: IsActive) {
+  function handleSortByLength(value: SortType) {
     setSortByLength(value);
-    setSortByAlphabet('inactive');
+    setSortByAlphabet(SortType.Default);
   }
 
-  function handleReverse(value: IsActive) {
+  function handleReverse(value: SortType) {
     setReverseArr(value);
   }
 
   function handleReset() {
-    setSortByAlphabet('inactive');
-    setSortByLength('inactive');
-    setReverseArr('inactive');
+    setSortByAlphabet(SortType.Default);
+    setSortByLength(SortType.Default);
+    setReverseArr(SortType.Default);
   }
 
   return (
@@ -60,35 +62,39 @@ export const App: React.FC = () => {
         <button
           type="button"
           className={cn('button is-info', {
-            'is-light': sortByAlphabet !== 'active',
+            'is-light': sortByAlphabet !== SortType.Alphabet,
           })}
-          onClick={() => handleSortByAlphabet('active')}
+          onClick={() => handleSortByAlphabet(SortType.Alphabet)}
         >
           Sort alphabetically
         </button>
         <button
           type="button"
           className={cn('button is-success', {
-            'is-light': sortByLength !== 'active',
+            'is-light': sortByLength !== SortType.Length,
           })}
-          onClick={() => handleSortByLength('active')}
+          onClick={() => handleSortByLength(SortType.Length)}
         >
           Sort by length
         </button>
         <button
           type="button"
           className={cn('button is-warning', {
-            'is-light': reverseArr !== 'active',
+            'is-light': reverseArr !== SortType.Reverse,
           })}
           onClick={() =>
-            handleReverse(reverseArr === 'active' ? 'inactive' : 'active')
+            handleReverse(
+              reverseArr === SortType.Reverse
+                ? SortType.Default
+                : SortType.Reverse,
+            )
           }
         >
           Reverse
         </button>
-        {(sortByAlphabet !== 'inactive' ||
-          sortByLength !== 'inactive' ||
-          reverseArr !== 'inactive') && (
+        {(sortByAlphabet !== SortType.Default ||
+          sortByLength !== SortType.Default ||
+          reverseArr !== SortType.Default) && (
           <button
             type="button"
             className={cn('button is-danger', {

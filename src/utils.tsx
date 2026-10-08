@@ -1,4 +1,10 @@
-import { SortOptions } from './types';
+import { SortType } from './types';
+
+type SortOptions = {
+  byAlphabet: SortType;
+  byLength: SortType;
+  reverse: SortType;
+};
 
 export const sortByParam = (
   goods: string[],
@@ -6,15 +12,15 @@ export const sortByParam = (
 ): string[] => {
   let arrayResult = [...goods];
 
-  if (options.byAlphabet === 'active') {
+  if (options.byAlphabet === SortType.Alphabet) {
     arrayResult = [...goods].sort((a, b) => a.localeCompare(b));
   }
 
-  if (options.byLength === 'active') {
+  if (options.byLength === SortType.Length) {
     arrayResult = [...goods].sort((a, b) => a.length - b.length);
   }
 
-  if (options.reverse === 'active') {
+  if (options.reverse === SortType.Reverse) {
     arrayResult.reverse();
   }
 
